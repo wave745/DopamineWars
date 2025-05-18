@@ -70,24 +70,32 @@ export default function Footer() {
             <h3 className="text-lg font-semibold text-white mb-4">Resources</h3>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition">
-                  Community Guidelines
-                </a>
+                <Link href="/trending">
+                  <a className="text-muted-foreground hover:text-primary transition">
+                    Community Guidelines
+                  </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition">
-                  Content Policy
-                </a>
+                <Link href="/trending">
+                  <a className="text-muted-foreground hover:text-primary transition">
+                    Content Policy
+                  </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition">
-                  API Documentation
-                </a>
+                <Link href="/leaderboard">
+                  <a className="text-muted-foreground hover:text-primary transition">
+                    API Documentation
+                  </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition">
-                  Developer Resources
-                </a>
+                <Link href="/leaderboard">
+                  <a className="text-muted-foreground hover:text-primary transition">
+                    Developer Resources
+                  </a>
+                </Link>
               </li>
             </ul>
           </div>

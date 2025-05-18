@@ -2,7 +2,7 @@ import type { Express, Request, Response } from "express";
 import express from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { setupAuth, isAuthenticated } from "./replitAuth";
+// Anonymous app - no auth required
 import multer from "multer";
 import path from "path";
 import fs from "fs";
@@ -40,19 +40,10 @@ const emojiSchema = z.enum(["😐", "😊", "😄", "🤯", "🔥"]);
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
   
-  // Set up authentication
-  await setupAuth(app);
-  
-  // Auth user endpoint
-  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      res.json(user);
-    } catch (error) {
-      console.error("Error fetching user:", error);
-      res.status(500).json({ message: "Failed to fetch user" });
-    }
+  // Public version - No authentication needed
+  // This endpoint returns null since we don't require user info for anonymous app
+  app.get('/api/auth/user', async (_req, res) => {
+    res.status(401).json({ message: "Unauthorized" });
   });
   
   // API endpoints
@@ -199,10 +190,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/content/:id/save", isAuthenticated, async (req: any, res) => {
+  app.post("/api/content/:id/save", async (_req, res) => {
     try {
-      const userId = req.user.claims.sub;
-      const contentId = parseInt(req.params.id);
+      const userId = "anonymous-user";
+      const contentId = parseInt(_req.params.id);
       
       const content = await storage.getContentById(contentId);
       if (!content) {
@@ -217,10 +208,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/content/:id/unsave", isAuthenticated, async (req: any, res) => {
+  app.post("/api/content/:id/unsave", async (_req, res) => {
     try {
-      const userId = req.user.claims.sub;
-      const contentId = parseInt(req.params.id);
+      const userId = "anonymous-user";
+      const contentId = parseInt(_req.params.id);
       
       await storage.removeFavorite(userId, contentId);
       

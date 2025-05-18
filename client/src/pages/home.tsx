@@ -65,20 +65,24 @@ export default function Home() {
               </p>
               
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Button 
-                  size="lg"
-                  className="bg-gradient-to-r from-primary to-[#EC4899] text-white shadow-lg hover:shadow-[#EC4899]/50 transition"
-                >
-                  Sign Up Now
-                </Button>
+                <Link href="/trending">
+                  <Button 
+                    size="lg"
+                    className="bg-gradient-to-r from-primary to-[#EC4899] text-white shadow-lg hover:shadow-[#EC4899]/50 transition"
+                  >
+                    Start Rating
+                  </Button>
+                </Link>
                 
-                <Button 
-                  variant="secondary" 
-                  size="lg"
-                  className="shadow-lg hover:shadow-primary/30 transition"
-                >
-                  Learn More
-                </Button>
+                <Link href="/leaderboard">
+                  <Button 
+                    variant="secondary" 
+                    size="lg"
+                    className="shadow-lg hover:shadow-primary/30 transition"
+                  >
+                    View Leaderboard
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
