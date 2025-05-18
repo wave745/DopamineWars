@@ -169,11 +169,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/content/:id/vote", isAuthenticated, async (req: any, res) => {
+  app.post("/api/content/:id/vote", async (req: any, res) => {
     try {
       const contentId = parseInt(req.params.id);
       const { emoji } = req.body;
-      const userId = req.user.claims.sub;
+      const userId = "anonymous-user";
       
       // Validate emoji
       const validEmoji = emojiSchema.parse(emoji);
