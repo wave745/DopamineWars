@@ -57,11 +57,11 @@ export default function Home() {
               </div>
               
               <h2 className="text-2xl md:text-4xl font-bold font-sans mb-4">
-                Join the Dopamine Wars
+                Participate in the Dopamine Meter
               </h2>
               
               <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-8">
-                Upload your content, vote on what makes the internet's brain light up, and watch the realtime dopamine index fluctuate.
+                Anonymously upload content, vote, and track the dopamine index in real-time.
               </p>
               
               <div className="flex flex-col sm:flex-row justify-center gap-4">

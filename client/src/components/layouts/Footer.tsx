@@ -27,15 +27,6 @@ export default function Footer() {
               <a href="#" className="text-muted-foreground hover:text-primary transition">
                 <FaTwitter />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition">
-                <FaInstagram />
-              </a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition">
-                <FaDiscord />
-              </a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition">
-                <FaTiktok />
-              </a>
             </div>
           </div>
           
@@ -44,17 +35,17 @@ export default function Footer() {
             <ul className="space-y-2">
               <li>
                 <Link href="/">
-                  <a className="text-muted-foreground hover:text-primary transition">Home</a>
+                  <span className="text-muted-foreground hover:text-primary transition cursor-pointer">Home</span>
                 </Link>
               </li>
               <li>
                 <Link href="/trending">
-                  <a className="text-muted-foreground hover:text-primary transition">Trending</a>
+                  <span className="text-muted-foreground hover:text-primary transition cursor-pointer">Trending</span>
                 </Link>
               </li>
               <li>
                 <Link href="/leaderboard">
-                  <a className="text-muted-foreground hover:text-primary transition">Leaderboard</a>
+                  <span className="text-muted-foreground hover:text-primary transition cursor-pointer">Leaderboard</span>
                 </Link>
               </li>
               <li>
@@ -62,40 +53,6 @@ export default function Footer() {
               </li>
               <li>
                 <a href="#" className="text-muted-foreground hover:text-primary transition">FAQs</a>
-              </li>
-            </ul>
-          </div>
-          
-          <div>
-            <h3 className="text-lg font-semibold text-white mb-4">Resources</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link href="/trending">
-                  <a className="text-muted-foreground hover:text-primary transition">
-                    Community Guidelines
-                  </a>
-                </Link>
-              </li>
-              <li>
-                <Link href="/trending">
-                  <a className="text-muted-foreground hover:text-primary transition">
-                    Content Policy
-                  </a>
-                </Link>
-              </li>
-              <li>
-                <Link href="/leaderboard">
-                  <a className="text-muted-foreground hover:text-primary transition">
-                    API Documentation
-                  </a>
-                </Link>
-              </li>
-              <li>
-                <Link href="/leaderboard">
-                  <a className="text-muted-foreground hover:text-primary transition">
-                    Developer Resources
-                  </a>
-                </Link>
               </li>
             </ul>
           </div>

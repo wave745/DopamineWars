@@ -16,14 +16,14 @@ export default function HeroSection() {
       <div className="max-w-3xl mx-auto">
         <h1 className="text-4xl md:text-6xl font-bold font-sans leading-tight mb-6">
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-[#EC4899]">
-            The dopamine wars are real
+            Anonymous dopamine tracking
           </span>
           <br />
-          <span className="text-white">and we're here to measure them.</span>
+          <span className="text-white">measure what makes the brain light up.</span>
         </h1>
         
         <p className="text-muted-foreground text-xl md:text-2xl mb-8">
-          Upload. Vote. Watch the dopamine spike.
+          No accounts. Just upload, vote, and watch.
         </p>
         
         <div className="flex flex-wrap justify-center gap-4">
