@@ -1,5 +1,5 @@
 import { 
-  type User, type InsertUser, 
+  type User, type InsertUser, type UpsertUser,
   type Content, type InsertContent,
   type Vote, type InsertVote, 
   type Favorite, type InsertFavorite,
