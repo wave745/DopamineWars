@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { Switch, Route, useRouter } from "wouter";
+import React, { useEffect } from "react";
+import { Switch, Route, useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -12,13 +12,14 @@ import Navbar from "@/components/layouts/Navbar";
 import Footer from "@/components/layouts/Footer";
 import { useAuth } from "@/hooks/useAuth";
 
-// Import Dashboard component 
-// Since we're transitioning from Supabase to Replit Auth, we'll just use Home temporarily for dashboard
-// You can create a proper Dashboard component later
+type ProtectedRouteProps = {
+  component: React.ComponentType<any>;
+  requiredAuth?: boolean;
+};
 
 // Custom route component that handles redirects based on auth state
-const ProtectedRoute = ({ component: Component, requiredAuth = true }) => {
-  const [, navigate] = useRouter();
+const ProtectedRoute = ({ component: Component, requiredAuth = true }: ProtectedRouteProps) => {
+  const [, setLocation] = useLocation();
   const { isAuthenticated, isLoading } = useAuth();
   
   useEffect(() => {
@@ -32,9 +33,9 @@ const ProtectedRoute = ({ component: Component, requiredAuth = true }) => {
     
     // If user is logged in but trying to access a page that doesn't require auth
     if (!requiredAuth && isAuthenticated) {
-      navigate('/dashboard');
+      setLocation('/dashboard');
     }
-  }, [isAuthenticated, isLoading, navigate, requiredAuth]);
+  }, [isAuthenticated, isLoading, setLocation, requiredAuth]);
   
   // Show loading state while checking authentication
   if (isLoading) {
@@ -81,6 +82,7 @@ function App() {
       </TooltipProvider>
     </QueryClientProvider>
   );
+}
 }
 
 export default App;
