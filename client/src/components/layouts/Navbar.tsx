@@ -10,6 +10,7 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { toast } = useToast();
   const { user, isLoading, isAuthenticated } = useAuth();
+  const displayName = user?.firstName || user?.email?.split('@')[0] || 'User';
 
   const isActive = (path: string) => location === path;
 
@@ -72,7 +73,7 @@ export default function Navbar() {
             <>
               <div className="hidden md:block text-white mr-2">
                 <span className="text-sm text-muted-foreground">Signed in as </span>
-                <span className="text-sm font-medium">{user?.username || user?.email?.split('@')[0] || 'User'}</span>
+                <span className="text-sm font-medium">{displayName}</span>
               </div>
               <Button 
                 variant="ghost" 
@@ -150,7 +151,7 @@ export default function Navbar() {
           {isAuthenticated && (
             <div className="py-2 mt-2 border-t border-muted/30">
               <div className="text-sm text-muted-foreground mb-2">
-                Signed in as <span className="font-medium text-white">{user?.username || user?.email?.split('@')[0] || 'User'}</span>
+                Signed in as <span className="font-medium text-white">{displayName}</span>
               </div>
               <Button 
                 variant="ghost" 
