@@ -1,0 +1,303 @@
+DOPAMETER — MASTER BLUEPRINT v1.0
+The Complete Guide to Building & Deploying Dopameter
+With: Auth • Uploads • Ratings • Leaderboard • Chart • Hosting
+
+⚙️ PART 1: SETTING UP YOUR STACK
+🧰 Tools You'll Use:
+Feature	Tool
+Auth + DB	Supabase
+Frontend Framework	React.js
+Styling	Tailwind CSS
+Charting	Chart.js
+Hosting	Replit (for now)
+
+🏗 PART 2: FOLDER STRUCTURE
+Inside your Replit project:
+
+css
+Copy
+Edit
+src/
+├── components/
+│   ├── Auth.jsx
+│   ├── Dashboard.jsx
+│   ├── Upload.jsx
+│   ├── Leaderboard.jsx
+│   ├── DopamineChart.jsx
+│   ├── Navbar.jsx
+├── supabaseClient.js
+├── App.jsx
+├── index.js
+🔐 PART 3: SUPABASE SETUP
+Go to https://supabase.com → Create Project
+
+Turn on Email Auth under "Authentication"
+
+🧱 Database Schema
+In Supabase → SQL Editor → Run this:
+
+sql
+Copy
+Edit
+create table posts (
+  id uuid primary key default uuid_generate_v4(),
+  user_id uuid references auth.users on delete cascade,
+  content_url text,
+  category text,
+  rating_score integer default 0,
+  created_at timestamp default now()
+);
+
+create table votes (
+  id uuid primary key default uuid_generate_v4(),
+  user_id uuid,
+  post_id uuid,
+  emoji text,
+  created_at timestamp default now()
+);
+🧩 PART 4: INSTALL DEPENDENCIES
+In your Replit Shell:
+
+bash
+Copy
+Edit
+npm install @supabase/supabase-js react-router-dom chart.js react-chartjs-2
+🧠 PART 5: CORE CODE SNIPPETS
+🗂 supabaseClient.js
+js
+Copy
+Edit
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = 'https://your-project.supabase.co';
+const supabaseKey = 'your-anon-key';
+export const supabase = createClient(supabaseUrl, supabaseKey);
+🔐 Auth.jsx
+Email magic-link login system.
+
+jsx
+Copy
+Edit
+import { useState } from 'react';
+import { supabase } from '../supabaseClient';
+
+export default function Auth() {
+  const [email, setEmail] = useState('');
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const { error } = await supabase.auth.signInWithOtp({ email });
+    if (error) alert(error.message);
+    else alert('Check your email for the login link!');
+  };
+
+  return (
+    <div className="p-6">
+      <h1 className="text-xl mb-2">Login to Dopameter</h1>
+      <form onSubmit={handleLogin}>
+        <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" className="p-2 border w-full" />
+        <button className="bg-green-500 text-white px-4 py-2 mt-2">Send Magic Link</button>
+      </form>
+    </div>
+  );
+}
+🧾 Upload.jsx
+Upload a link (video, meme, etc.)
+
+jsx
+Copy
+Edit
+import { useState } from 'react';
+import { supabase } from '../supabaseClient';
+
+export default function Upload({ user }) {
+  const [url, setUrl] = useState('');
+
+  const handleUpload = async () => {
+    const { error } = await supabase.from('posts').insert([{ user_id: user.id, content_url: url }]);
+    if (error) alert(error.message);
+    else alert('Uploaded successfully!');
+  };
+
+  return (
+    <div className="p-4">
+      <input value={url} onChange={e => setUrl(e.target.value)} placeholder="Paste content URL" className="p-2 border w-full" />
+      <button onClick={handleUpload} className="mt-2 bg-blue-500 px-4 py-2 text-white">Upload</button>
+    </div>
+  );
+}
+🧠 Rating.jsx
+User votes using emojis.
+
+jsx
+Copy
+Edit
+import { supabase } from '../supabaseClient';
+
+const emojis = [
+  { symbol: '😐', value: 'mid' },
+  { symbol: '😊', value: 'mild' },
+  { symbol: '😄', value: 'solid' },
+  { symbol: '🤯', value: 'brain' },
+  { symbol: '🔥', value: 'liquidation' },
+];
+
+export default function Rating({ user, postId }) {
+  const handleVote = async (emoji) => {
+    await supabase.from('votes').insert([{ user_id: user.id, post_id: postId, emoji }]);
+    alert('Rated!');
+  };
+
+  return (
+    <div className="flex space-x-2">
+      {emojis.map((e) => (
+        <button key={e.value} onClick={() => handleVote(e.value)}>{e.symbol}</button>
+      ))}
+    </div>
+  );
+}
+📈 DopamineChart.jsx
+Show rating trend over time.
+
+jsx
+Copy
+Edit
+import { Line } from 'react-chartjs-2';
+
+export default function DopamineChart({ data }) {
+  const chartData = {
+    labels: data.map(item => item.created_at),
+    datasets: [{
+      label: 'Dopamine Index',
+      data: data.map(item => item.rating_score),
+      borderColor: '#22c55e',
+      backgroundColor: 'rgba(34,197,94,0.1)',
+    }]
+  };
+
+  return (
+    <div className="p-4">
+      <Line data={chartData} />
+    </div>
+  );
+}
+🏆 Leaderboard.jsx
+Renders top content.
+
+jsx
+Copy
+Edit
+import { useEffect, useState } from 'react';
+import { supabase } from '../supabaseClient';
+
+export default function Leaderboard() {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const { data } = await supabase.from('posts').select('*').order('rating_score', { ascending: false }).limit(10);
+      setPosts(data);
+    };
+    fetch();
+  }, []);
+
+  return (
+    <div className="p-4">
+      <h2 className="text-xl">Leaderboard</h2>
+      <ul>{posts.map(p => (
+        <li key={p.id} className="p-2 border-b">{p.content_url} - {p.rating_score}</li>
+      ))}</ul>
+    </div>
+  );
+}
+💼 Dashboard.jsx
+Display user uploads.
+
+jsx
+Copy
+Edit
+import { useEffect, useState } from 'react';
+import { supabase } from '../supabaseClient';
+import Upload from './Upload';
+
+export default function Dashboard({ session }) {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const { data } = await supabase.from('posts').select('*').eq('user_id', session.user.id);
+      setPosts(data);
+    };
+    fetchPosts();
+  }, []);
+
+  return (
+    <div>
+      <Upload user={session.user} />
+      <h2 className="text-lg">Your Uploads</h2>
+      <ul>{posts.map(p => (
+        <li key={p.id}>{p.content_url}</li>
+      ))}</ul>
+    </div>
+  );
+}
+🧠 App.jsx
+Control session flow.
+
+jsx
+Copy
+Edit
+import { useState, useEffect } from 'react';
+import { supabase } from './supabaseClient';
+import Auth from './components/Auth';
+import Dashboard from './components/Dashboard';
+import Leaderboard from './components/Leaderboard';
+
+function App() {
+  const [session, setSession] = useState(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      setSession(data.session);
+    });
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+  }, []);
+
+  return (
+    <div className="bg-black text-white min-h-screen p-4">
+      {!session ? <Auth /> : (
+        <>
+          <Dashboard session={session} />
+          <Leaderboard />
+        </>
+      )}
+    </div>
+  );
+}
+
+export default App;
+🚀 PART 6: GOING LIVE
+🔗 Connect to Domain (Optional)
+Use Replit’s domain linking or custom domain from Namecheap/Godaddy.
+
+🧪 Final Checklist:
+✅ Supabase configured
+✅ Tables created
+✅ All components set
+✅ Tailwind or styling applied
+✅ Replit deployed
+
+💎 PART 7: POLISH IDEAS
+Add user profiles, avatars
+
+Add dark/light mode switch
+
+Dopamine streaks
+
+Dopamine “trading cards” for viral content
+
+Notifications for spikes
+
