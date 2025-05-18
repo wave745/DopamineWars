@@ -1,12 +1,11 @@
 import { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Button } from '@/components/ui/button';
-import { CloudUpload, LinkIcon } from 'lucide-react';
+import { CloudUpload } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useAuth } from '@/hooks/useAuth';
 
 interface ContentUploaderProps {
   className?: string;
@@ -14,7 +13,6 @@ interface ContentUploaderProps {
 }
 
 export function ContentUploader({ className = '', onSuccess }: ContentUploaderProps) {
-  const { user, isAuthenticated } = useAuth();
   const [uploading, setUploading] = useState(false);
   const [linkUrl, setLinkUrl] = useState('');
   const [contentType, setContentType] = useState('image');

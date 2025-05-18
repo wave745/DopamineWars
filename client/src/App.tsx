@@ -52,35 +52,22 @@ const ProtectedRoute = ({ component: Component, requiredAuth = true }: Protected
 };
 
 function App() {
-  const { isLoading } = useAuth();
-
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <div className="flex flex-col min-h-screen">
-          <Navbar />
-          <main className="flex-grow">
-            {isLoading ? (
-              <div className="flex items-center justify-center h-screen">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-              </div>
-            ) : (
-              <Switch>
-                <Route path="/" component={Home} />
-                <Route path="/trending" component={Trending} />
-                <Route path="/leaderboard" component={Leaderboard} />
-                <Route path="/dashboard">
-                  {() => <ProtectedRoute component={Home} requiredAuth={true} />}
-                </Route>
-                <Route component={NotFound} />
-              </Switch>
-            )}
-          </main>
-          <Footer />
-        </div>
-      </TooltipProvider>
-    </QueryClientProvider>
+    <TooltipProvider>
+      <Toaster />
+      <div className="flex flex-col min-h-screen">
+        <Navbar />
+        <main className="flex-grow">
+          <Switch>
+            <Route path="/" component={Home} />
+            <Route path="/trending" component={Trending} />
+            <Route path="/leaderboard" component={Leaderboard} />
+            <Route component={NotFound} />
+          </Switch>
+        </main>
+        <Footer />
+      </div>
+    </TooltipProvider>
   );
 }
 

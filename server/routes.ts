@@ -100,14 +100,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/content/upload", isAuthenticated, upload.single("file"), async (req: any, res) => {
+  app.post("/api/content/upload", upload.single("file"), async (req: any, res) => {
     try {
       if (!req.file) {
         return res.status(400).json({ message: "No file uploaded" });
       }
 
-      // Get user ID from authenticated session
-      const userId = req.user.claims.sub;
+      // Set a generic anonymous user ID
+      const userId = "anonymous-user";
 
       // Create a unique filename
       const fileName = `${Date.now()}-${Math.round(Math.random() * 1E9)}${path.extname(req.file.originalname)}`;
@@ -143,10 +143,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/content/import", isAuthenticated, async (req: any, res) => {
+  app.post("/api/content/import", async (req: any, res) => {
     try {
       const { url, type } = req.body;
-      const userId = req.user.claims.sub;
+      const userId = "anonymous-user";
       
       if (!url) {
         return res.status(400).json({ message: "URL is required" });
