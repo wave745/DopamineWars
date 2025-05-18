@@ -58,7 +58,7 @@ export default function Navbar() {
               Leaderboard
             </span>
           </Link>
-          {session && (
+          {isAuthenticated && (
             <Link href="/dashboard">
               <span className={`${isActive("/dashboard") ? "text-primary" : "text-white hover:text-primary"} transition cursor-pointer`}>
                 Dashboard
@@ -68,11 +68,11 @@ export default function Navbar() {
         </div>
         
         <div className="flex items-center space-x-3">
-          {session ? (
+          {isAuthenticated ? (
             <>
               <div className="hidden md:block text-white mr-2">
                 <span className="text-sm text-muted-foreground">Signed in as </span>
-                <span className="text-sm font-medium">{session.user.email.split('@')[0]}</span>
+                <span className="text-sm font-medium">{user?.username || user?.email?.split('@')[0] || 'User'}</span>
               </div>
               <Button 
                 variant="ghost" 
@@ -86,12 +86,12 @@ export default function Navbar() {
             </>
           ) : (
             <>
-              <Link href="/login">
+              <Link href="/api/login">
                 <Button variant="ghost" className="text-white bg-primary/20 hover:bg-primary/30 glow-effect">
                   Sign In
                 </Button>
               </Link>
-              <Link href="/login">
+              <Link href="/api/login">
                 <Button className="text-white bg-gradient-to-r from-primary to-[#EC4899] hover:from-primary/90 hover:to-[#EC4899]/90 glow-effect">
                   Sign Up
                 </Button>
@@ -137,7 +137,7 @@ export default function Navbar() {
               Leaderboard
             </div>
           </Link>
-          {session && (
+          {isAuthenticated && (
             <Link href="/dashboard">
               <div 
                 className={`block py-2 ${isActive("/dashboard") ? "text-primary" : "text-white"} cursor-pointer`}
@@ -147,10 +147,10 @@ export default function Navbar() {
               </div>
             </Link>
           )}
-          {session && (
+          {isAuthenticated && (
             <div className="py-2 mt-2 border-t border-muted/30">
               <div className="text-sm text-muted-foreground mb-2">
-                Signed in as <span className="font-medium text-white">{session.user.email.split('@')[0]}</span>
+                Signed in as <span className="font-medium text-white">{user?.username || user?.email?.split('@')[0] || 'User'}</span>
               </div>
               <Button 
                 variant="ghost" 
