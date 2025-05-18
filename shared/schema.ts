@@ -97,10 +97,10 @@ export const insertUserSchema = createInsertSchema(users).pick({
 export const upsertUserSchema = z.object({
   id: z.string(),
   username: z.string(),
-  email: z.string().nullable().optional(),
-  firstName: z.string().nullable().optional(),
-  lastName: z.string().nullable().optional(),
-  profileImageUrl: z.string().nullable().optional(),
+  email: z.string().nullable(),
+  firstName: z.string().nullable(),
+  lastName: z.string().nullable(),
+  profileImageUrl: z.string().nullable(),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
 });

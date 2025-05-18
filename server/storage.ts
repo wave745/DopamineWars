@@ -9,9 +9,10 @@ import {
 // Interface for storage operations
 export interface IStorage {
   // User methods
-  getUser(id: number): Promise<User | undefined>;
+  getUser(id: string): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+  upsertUser(user: UpsertUser): Promise<User>;
   
   // Content methods
   getAllContent(): Promise<any[]>;
@@ -25,9 +26,9 @@ export interface IStorage {
   createVote(vote: InsertVote): Promise<Vote>;
   
   // Favorite methods
-  getFavoritesByUserId(userId: number): Promise<any[]>;
-  saveFavorite(userId: number, contentId: number): Promise<Favorite>;
-  removeFavorite(userId: number, contentId: number): Promise<void>;
+  getFavoritesByUserId(userId: string): Promise<any[]>;
+  saveFavorite(userId: string, contentId: number): Promise<Favorite>;
+  removeFavorite(userId: string, contentId: number): Promise<void>;
   
   // Leaderboard and chart methods
   getLeaderboard(timeFrame: "daily" | "weekly" | "monthly"): Promise<any[]>;
@@ -46,13 +47,12 @@ const emojiScores: Record<string, number> = {
 
 // In-memory implementation of storage
 export class MemStorage implements IStorage {
-  private users: Map<number, User>;
+  private users: Map<string, User>;
   private content: Map<number, Content>;
   private votes: Map<number, Vote>;
   private favorites: Map<number, Favorite>;
   private chartData: Map<number, ChartData>;
   
-  private userIdCounter: number;
   private contentIdCounter: number;
   private voteIdCounter: number;
   private favoriteIdCounter: number;
@@ -65,7 +65,6 @@ export class MemStorage implements IStorage {
     this.favorites = new Map();
     this.chartData = new Map();
     
-    this.userIdCounter = 1;
     this.contentIdCounter = 1;
     this.voteIdCounter = 1;
     this.favoriteIdCounter = 1;
@@ -76,7 +75,7 @@ export class MemStorage implements IStorage {
   }
 
   // User methods
-  async getUser(id: number): Promise<User | undefined> {
+  async getUser(id: string): Promise<User | undefined> {
     return this.users.get(id);
   }
 
@@ -87,10 +86,41 @@ export class MemStorage implements IStorage {
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
-    const id = this.userIdCounter++;
-    const user: User = { id, ...insertUser };
-    this.users.set(id, user);
+    const createdAt = new Date();
+    const updatedAt = new Date();
+    const user: User = { ...insertUser, createdAt, updatedAt };
+    this.users.set(user.id, user);
     return user;
+  }
+  
+  async upsertUser(userData: UpsertUser): Promise<User> {
+    const existingUser = await this.getUser(userData.id);
+    
+    if (existingUser) {
+      // Update existing user
+      const updatedUser: User = {
+        ...existingUser,
+        ...userData,
+        updatedAt: new Date()
+      };
+      this.users.set(updatedUser.id, updatedUser);
+      return updatedUser;
+    } else {
+      // Create new user
+      const createdAt = new Date();
+      const updatedAt = new Date();
+      const newUser: User = {
+        ...userData,
+        createdAt,
+        updatedAt,
+        email: userData.email || null,
+        firstName: userData.firstName || null,
+        lastName: userData.lastName || null,
+        profileImageUrl: userData.profileImageUrl || null
+      };
+      this.users.set(newUser.id, newUser);
+      return newUser;
+    }
   }
 
   // Content methods
@@ -121,7 +151,7 @@ export class MemStorage implements IStorage {
 
   async createContent(insertContent: InsertContent): Promise<any> {
     const id = this.contentIdCounter++;
-    const createdAt = new Date().toISOString();
+    const createdAt = new Date();
     const content: Content = { id, ...insertContent, createdAt };
     this.content.set(id, content);
     return this.enrichContent(content);
@@ -135,14 +165,14 @@ export class MemStorage implements IStorage {
 
   async createVote(insertVote: InsertVote): Promise<Vote> {
     const id = this.voteIdCounter++;
-    const createdAt = new Date().toISOString();
+    const createdAt = new Date();
     const vote: Vote = { id, ...insertVote, createdAt };
     this.votes.set(id, vote);
     return vote;
   }
 
   // Favorite methods
-  async getFavoritesByUserId(userId: number): Promise<any[]> {
+  async getFavoritesByUserId(userId: string): Promise<any[]> {
     const favorites = Array.from(this.favorites.values())
       .filter(fav => fav.userId === userId);
     
@@ -159,7 +189,7 @@ export class MemStorage implements IStorage {
     return enrichedFavorites;
   }
 
-  async saveFavorite(userId: number, contentId: number): Promise<Favorite> {
+  async saveFavorite(userId: string, contentId: number): Promise<Favorite> {
     // Check if already favorited
     const existing = Array.from(this.favorites.values())
       .find(fav => fav.userId === userId && fav.contentId === contentId);
@@ -169,13 +199,13 @@ export class MemStorage implements IStorage {
     }
     
     const id = this.favoriteIdCounter++;
-    const createdAt = new Date().toISOString();
+    const createdAt = new Date();
     const favorite: Favorite = { id, userId, contentId, createdAt };
     this.favorites.set(id, favorite);
     return favorite;
   }
 
-  async removeFavorite(userId: number, contentId: number): Promise<void> {
+  async removeFavorite(userId: string, contentId: number): Promise<void> {
     const favorites = Array.from(this.favorites.values());
     const favorite = favorites.find(fav => fav.userId === userId && fav.contentId === contentId);
     
@@ -343,10 +373,14 @@ export class MemStorage implements IStorage {
 
   // Initialize sample data
   private initializeSampleData() {
-    // Create sample user
-    this.createUser({
+    // Create sample user with string ID
+    const demoUser = this.upsertUser({
+      id: "demo-user-1",
       username: "demo_user",
-      password: "password123"
+      email: "demo@example.com",
+      firstName: "Demo",
+      lastName: "User",
+      profileImageUrl: "https://api.dicebear.com/6.x/avataaars/svg?seed=demo"
     });
 
     // Sample content URLs
@@ -366,6 +400,7 @@ export class MemStorage implements IStorage {
     sampleUrls.forEach((url, index) => {
       const type = contentTypes[index % contentTypes.length];
       this.createContent({
+        userId: "demo-user-1", // Using string ID
         type,
         url
       });
@@ -381,6 +416,7 @@ export class MemStorage implements IStorage {
       for (let i = 0; i < voteCount; i++) {
         const emoji = emojis[Math.floor(Math.random() * emojis.length)];
         this.createVote({
+          userId: "demo-user-1", // Using string ID
           contentId,
           emoji
         });
@@ -388,8 +424,8 @@ export class MemStorage implements IStorage {
     }
 
     // Create sample favorites
-    this.saveFavorite(1, 1);
-    this.saveFavorite(1, 3);
+    this.saveFavorite("demo-user-1", 1);
+    this.saveFavorite("demo-user-1", 3);
 
     // Create sample chart data for all time frames
     this.createSampleChartData("24H");
