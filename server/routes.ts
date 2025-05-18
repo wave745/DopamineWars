@@ -2,6 +2,7 @@ import type { Express, Request, Response } from "express";
 import express from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
+import { setupAuth, isAuthenticated } from "./replitAuth";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
@@ -38,6 +39,21 @@ const emojiSchema = z.enum(["😐", "😊", "😄", "🤯", "🔥"]);
 
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
+  
+  // Set up authentication
+  await setupAuth(app);
+  
+  // Auth user endpoint
+  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      res.json(user);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      res.status(500).json({ message: "Failed to fetch user" });
+    }
+  });
   
   // API endpoints
   app.get("/api/content", async (_req, res) => {
@@ -84,11 +100,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/content/upload", upload.single("file"), async (req, res) => {
+  app.post("/api/content/upload", isAuthenticated, upload.single("file"), async (req: any, res) => {
     try {
       if (!req.file) {
         return res.status(400).json({ message: "No file uploaded" });
       }
+
+      // Get user ID from authenticated session
+      const userId = req.user.claims.sub;
 
       // Create a unique filename
       const fileName = `${Date.now()}-${Math.round(Math.random() * 1E9)}${path.extname(req.file.originalname)}`;
@@ -107,6 +126,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const contentType = req.body.type || getContentType(req.file.mimetype);
       
       const validatedData = insertContentSchema.parse({
+        userId,
         type: contentType,
         url: `/uploads/${fileName}`,
       });
@@ -123,15 +143,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/content/import", async (req, res) => {
+  app.post("/api/content/import", isAuthenticated, async (req: any, res) => {
     try {
       const { url, type } = req.body;
+      const userId = req.user.claims.sub;
       
       if (!url) {
         return res.status(400).json({ message: "URL is required" });
       }
       
       const validatedData = insertContentSchema.parse({
+        userId,
         type: type || "image",
         url,
       });
@@ -147,10 +169,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/content/:id/vote", async (req, res) => {
+  app.post("/api/content/:id/vote", isAuthenticated, async (req: any, res) => {
     try {
       const contentId = parseInt(req.params.id);
       const { emoji } = req.body;
+      const userId = req.user.claims.sub;
       
       // Validate emoji
       const validEmoji = emojiSchema.parse(emoji);
@@ -161,6 +184,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       const validatedData = insertVoteSchema.parse({
+        userId,
         contentId,
         emoji: validEmoji,
       });
@@ -175,11 +199,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/content/:id/save", async (req, res) => {
+  app.post("/api/content/:id/save", isAuthenticated, async (req: any, res) => {
     try {
-      // Note: In a real implementation, this would use the authenticated user's ID
-      // For now, we'll use a dummy user ID
-      const userId = 1;
+      const userId = req.user.claims.sub;
       const contentId = parseInt(req.params.id);
       
       const content = await storage.getContentById(contentId);
@@ -195,10 +217,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/content/:id/unsave", async (req, res) => {
+  app.post("/api/content/:id/unsave", isAuthenticated, async (req: any, res) => {
     try {
-      // Note: In a real implementation, this would use the authenticated user's ID
-      const userId = 1;
+      const userId = req.user.claims.sub;
       const contentId = parseInt(req.params.id);
       
       await storage.removeFavorite(userId, contentId);

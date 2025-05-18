@@ -2,27 +2,21 @@ import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Brain, LogOut, User } from "lucide-react";
 import { useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 
-interface NavbarProps {
-  session?: any;
-}
-
-export default function Navbar({ session }: NavbarProps) {
+export default function Navbar() {
   const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { toast } = useToast();
+  const { user, isLoading, isAuthenticated } = useAuth();
 
   const isActive = (path: string) => location === path;
 
   const handleSignOut = async () => {
     try {
-      await supabase.auth.signOut();
-      toast({
-        title: "Signed out",
-        description: "You have been successfully signed out",
-      });
+      // Use Replit Auth signout
+      window.location.href = "/api/logout";
     } catch (error) {
       toast({
         title: "Error",
