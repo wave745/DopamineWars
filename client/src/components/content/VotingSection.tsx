@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Content, EmojiRating } from "@/types";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 
@@ -9,10 +9,38 @@ interface VotingSectionProps {
   content?: Content;
 }
 
-export default function VotingSection({ content }: VotingSectionProps) {
+export default function VotingSection({ content: initialContent }: VotingSectionProps) {
   const [selectedEmoji, setSelectedEmoji] = useState<EmojiRating | null>(null);
+  const [currentContentIndex, setCurrentContentIndex] = useState(0);
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  
+  // Fetch all content
+  const { data: allContents = [] } = useQuery<Content[]>({
+    queryKey: ['/api/content'],
+    refetchInterval: 60000, // Refresh content every minute
+  });
+  
+  const content = allContents.length > 0 ? allContents[currentContentIndex] : initialContent;
+  
+  // Change content every 60 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (allContents.length > 0) {
+        setCurrentContentIndex(prevIndex => 
+          prevIndex >= allContents.length - 1 ? 0 : prevIndex + 1
+        );
+        
+        toast({
+          title: "Showing new content",
+          description: "Content refreshes every minute",
+          duration: 3000,
+        });
+      }
+    }, 60000); // 60 seconds
+    
+    return () => clearInterval(interval);
+  }, [allContents, toast]);
 
   const emojis: { emoji: EmojiRating; label: string }[] = [
     { emoji: "😐", label: "Mid" },

@@ -38,8 +38,8 @@ export default function Home() {
         {/* Trending Content */}
         <ContentGrid title="Trending" accentColor="#FBBF24" />
 
-        {/* Voting Section */}
-        <VotingSection content={firstContent} />
+        {/* Voting Section - Auto-rotating content */}
+        <VotingSection />
 
         {/* Leaderboard Section (Shortened version) */}
         <LeaderboardTable />
