@@ -1,0 +1,121 @@
+GOAL:
+✨ Anyone can land on Dopameter, instantly upload content, instantly vote, instantly react — no login walls, no gatekeeping, all chaos. And the UI? So clean and juicy, it hits harder than a dopamine drip.
+
+🛠️ CORE FEATURES TO BUILD (FOR ENGAGEMENT + OPEN INTERACTION)
+1. 🧾 Public Upload Panel (No Login Needed)
+What you need:
+
+A form with just 1–2 fields: URL, optional Category
+
+A default user_id = 'anonymous' for guests
+
+Backend Logic:
+
+Create anonymous entries in the posts table
+
+Timestamp and push it to the top of the feed
+
+UX Detail:
+
+After upload, auto-scroll to the top where their content shows
+
+Add a “🎉 Your dopamine drop is live!” toast/alert
+
+2. 🎭 Real-Time Global Feed
+What you need:
+
+Fetch posts ordered by created_at DESC
+
+Limit = 30, auto-paginate
+
+Include vote score live
+
+UX Detail:
+
+New uploads animate in with a quick “pulse” effect
+
+Sort switcher: Newest | Trending | 🔥 Highest Rated
+
+3. 🧠 Emoji Voting System (No Auth Needed)
+Reactions to Include:
+
+😐 Mid
+
+😊 Mild
+
+😄 Solid
+
+🤯 Brain Melt
+
+🔥 Serotonin Liquidation
+
+Backend Logic:
+
+Each vote stores:
+
+post_id
+
+emoji
+
+Optionally: session ID or IP hash (if you want to prevent spam later)
+
+Aggregate emoji counts per post
+
+Frontend:
+
+Show emoji buttons below each post
+
+Animate when clicked (bounce/pop)
+
+Show real-time tally count for each emoji
+
+Optional: “You voted 🤯 on this” highlight
+
+4. 🚨 Live Dopamine Pulse (Leaderboard & Index)
+Dopamine Index: Rolling chart (daily spike tracker)
+
+Leaderboard: Top 5 highest-rated content (by emoji power score)
+
+Pulse Effects:
+
+Green for normal spikes
+
+Red flash for big “Liquidation” moments
+
+Optionally: Mini fire emoji appears on post
+
+🎨 UI/UX Suggestions (Make It Feel Addictive)
+Element	Enhancement
+Background	Glassmorphism w/ neon glow edges
+Animations	Subtle hovers, emoji pops, chart pulses
+Typography	Bold futuristic font like Sora, Inter, Space Grotesk
+CTA Buttons	Huge dopamine-colored buttons (“DROP CONTENT”, “RATE THIS”)
+Responsiveness	Mobile-first, vertical swipe + tap UX
+Content Cards	Rounded, glowing shadows, compact info
+Color Scheme	Neon green primary, red for spikes, yellow for fun hits, purple/blue for chill
+
+🔓 How to Do It Without Login
+✅ Anonymous Uploads:
+Just don't require auth — store user as 'guest' or null.
+
+✅ Voting Without Login:
+You can:
+
+Store in Supabase without user ID (just post_id, emoji)
+
+Use localStorage or sessionStorage to track votes per user on the frontend (to block spam voting if needed later)
+
+✅ Emoji Reactions:
+Store multiple reactions per post → count & display live.
+
+🚀 What You Should Add Next
+Instant content rendering at top (auto scroll + animate)
+
+Emoji vote system with tally + live feedback
+
+Leaderboard bar or floating widget
+
+A full-width real-time dopamine chart at top or side
+
+“Drop your hit” CTA always visible on screen
+
