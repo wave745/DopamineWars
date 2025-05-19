@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Brain } from "lucide-react";
+import BrainLogo from "@/components/ui/brain-logo";
 import { useState } from "react";
 
 export default function Navbar() {
@@ -16,7 +16,7 @@ export default function Navbar() {
           <Link href="/">
             <div className="flex items-center cursor-pointer">
               <div className="text-primary mr-2">
-                <Brain className="h-6 w-6" />
+                <BrainLogo size={24} />
               </div>
               <h1 className="text-2xl font-bold font-sans text-white">
                 <span className="text-primary">Dopa</span>meter
