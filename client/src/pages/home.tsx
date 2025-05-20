@@ -29,14 +29,14 @@ export default function Home() {
         {/* Hero Section */}
         <HeroSection />
 
-        {/* Live Dopameter Chart */}
-        <LiveChart />
+        {/* Trending Content - Now at the top */}
+        <ContentGrid title="Trending" accentColor="#FBBF24" />
 
         {/* Upload Section */}
         <UploadSection />
 
-        {/* Trending Content */}
-        <ContentGrid title="Trending" accentColor="#FBBF24" />
+        {/* Live Dopameter Chart - Now below upload section */}
+        <LiveChart />
 
         {/* Voting Section - Auto-rotating content */}
         <VotingSection />
