@@ -27,17 +27,17 @@ export default function Navbar() {
         
         <div className="hidden md:flex items-center space-x-6">
           <Link href="/">
-            <span className={`${isActive("/") ? "text-primary" : "text-white hover:text-primary"} transition cursor-pointer`}>
+            <span className={`${isActive("/") ? "text-primary" : "text-white hover:text-primary"} transition cursor-pointer nav-link`}>
               Home
             </span>
           </Link>
           <Link href="/trending">
-            <span className={`${isActive("/trending") ? "text-primary" : "text-white hover:text-primary"} transition cursor-pointer`}>
+            <span className={`${isActive("/trending") ? "text-primary" : "text-white hover:text-primary"} transition cursor-pointer nav-link`}>
               Trending
             </span>
           </Link>
           <Link href="/leaderboard">
-            <span className={`${isActive("/leaderboard") ? "text-primary" : "text-white hover:text-primary"} transition cursor-pointer`}>
+            <span className={`${isActive("/leaderboard") ? "text-primary" : "text-white hover:text-primary"} transition cursor-pointer nav-link`}>
               Leaderboard
             </span>
           </Link>
