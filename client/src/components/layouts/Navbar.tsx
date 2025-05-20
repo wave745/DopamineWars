@@ -41,6 +41,11 @@ export default function Navbar() {
               Leaderboard
             </span>
           </Link>
+          <Link href="/roadmap">
+            <span className={`${isActive("/roadmap") ? "text-primary" : "text-white hover:text-primary"} transition cursor-pointer nav-link`}>
+              Roadmap
+            </span>
+          </Link>
         </div>
         
         <div className="flex items-center space-x-3">
@@ -89,6 +94,14 @@ export default function Navbar() {
               onClick={() => setMobileMenuOpen(false)}
             >
               Leaderboard
+            </div>
+          </Link>
+          <Link href="/roadmap">
+            <div 
+              className={`block py-2 ${isActive("/roadmap") ? "text-primary" : "text-white"} cursor-pointer`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Roadmap
             </div>
           </Link>
         </div>

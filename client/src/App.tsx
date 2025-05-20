@@ -8,6 +8,7 @@ import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 import Trending from "@/pages/trending";
 import Leaderboard from "@/pages/leaderboard";
+import Roadmap from "@/pages/roadmap";
 import Navbar from "@/components/layouts/Navbar";
 import Footer from "@/components/layouts/Footer";
 import { useAuth } from "@/hooks/useAuth";
@@ -62,6 +63,7 @@ function App() {
             <Route path="/" component={Home} />
             <Route path="/trending" component={Trending} />
             <Route path="/leaderboard" component={Leaderboard} />
+            <Route path="/roadmap" component={Roadmap} />
             <Route component={NotFound} />
           </Switch>
         </main>
