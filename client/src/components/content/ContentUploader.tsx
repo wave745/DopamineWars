@@ -1,7 +1,7 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Button } from '@/components/ui/button';
-import { CloudUpload } from 'lucide-react';
+import { CloudUpload, Camera, Upload } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Input } from '@/components/ui/input';
@@ -115,6 +115,8 @@ export function ContentUploader({ className = '', onSuccess }: ContentUploaderPr
     uploadMutation.mutate(file);
   }, [uploadMutation]);
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
@@ -123,7 +125,15 @@ export function ContentUploader({ className = '', onSuccess }: ContentUploaderPr
     },
     maxSize: 10485760, // 10MB
     disabled: uploading,
+    noClick: true, // Disable click to open file dialog (we'll handle it manually)
   });
+  
+  const handleFileInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      uploadMutation.mutate(files[0]);
+    }
+  };
 
   const handleLinkUpload = (e: React.FormEvent) => {
     e.preventDefault();
@@ -141,22 +151,50 @@ export function ContentUploader({ className = '', onSuccess }: ContentUploaderPr
         <TabsContent value="upload">
           <div 
             {...getRootProps()}
-            className={`upload-area flex flex-col items-center justify-center p-8 rounded-xl text-center cursor-pointer 
+            className={`upload-area flex flex-col items-center justify-center p-8 rounded-xl text-center
                       border-2 border-dashed border-primary/50 hover:border-[#EC4899]/50 transition
                       ${isDragActive ? 'bg-primary/10' : 'bg-transparent'}`}
           >
             <input {...getInputProps()} />
+            <input 
+              type="file" 
+              ref={fileInputRef}
+              onChange={handleFileInputChange}
+              accept="image/*,video/*"
+              className="hidden"
+            />
             <CloudUpload className="text-primary text-4xl mb-4" />
             <h3 className="text-xl font-medium mb-2">
               {isDragActive ? 'Drop your content here' : 'Drag & drop content here'}
             </h3>
-            <p className="text-muted-foreground mb-4">or click to browse your files</p>
-            <Button 
-              className="bg-primary/20 hover:bg-primary/30 text-white" 
-              disabled={uploading}
-            >
-              {uploading ? 'Uploading...' : 'Select File'}
-            </Button>
+            <p className="text-muted-foreground mb-4">or use buttons below to share content</p>
+            
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Button 
+                className="bg-primary/20 hover:bg-primary/30 text-white flex items-center gap-2" 
+                disabled={uploading}
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <Upload size={18} />
+                {uploading ? 'Uploading...' : 'Select from files'}
+              </Button>
+              
+              <Button 
+                className="bg-primary/20 hover:bg-primary/30 text-white flex items-center gap-2" 
+                disabled={uploading}
+                onClick={() => {
+                  // For mobile devices - opens camera
+                  if (fileInputRef.current) {
+                    fileInputRef.current.accept = "image/*,video/*";
+                    fileInputRef.current.capture = "environment";
+                    fileInputRef.current.click();
+                  }
+                }}
+              >
+                <Camera size={18} />
+                Take photo/video
+              </Button>
+            </div>
           </div>
         </TabsContent>
         

@@ -20,6 +20,7 @@ export interface IStorage {
   getTrendingContent(limit?: number): Promise<any[]>;
   getLatestContent(limit?: number): Promise<any[]>;
   createContent(content: InsertContent): Promise<any>;
+  resetContent(): Promise<void>; // New method to reset content
   
   // Vote methods
   getVotesByContentId(contentId: number): Promise<Vote[]>;
@@ -70,8 +71,21 @@ export class MemStorage implements IStorage {
     this.favoriteIdCounter = 1;
     this.chartDataIdCounter = 1;
     
-    // Initialize with sample data
+    // Initialize with sample chart data only
     this.initializeSampleData();
+  }
+  
+  // Method to reset all content
+  async resetContent(): Promise<void> {
+    // Clear all content
+    this.content.clear();
+    this.votes.clear();
+    this.favorites.clear();
+    
+    // Reset counters
+    this.contentIdCounter = 1;
+    this.voteIdCounter = 1;
+    this.favoriteIdCounter = 1;
   }
 
   // User methods
