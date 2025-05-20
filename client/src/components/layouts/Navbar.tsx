@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import BrainLogo from "@/components/ui/brain-logo";
 import { useState } from "react";
 import { FaXTwitter } from "react-icons/fa6";
-import { FaWater } from "react-icons/fa";
 import { BiSolidBarChartAlt2 } from "react-icons/bi";
 
 export default function Navbar() {
@@ -67,7 +66,11 @@ export default function Navbar() {
               rel="noopener noreferrer"
               className="text-white hover:text-gray-300 transition"
             >
-              <FaWater size={20} />
+              <img 
+                src="https://solanatradingbots.com/wp-content/uploads/2024/07/pumpfunlogo.webp" 
+                alt="pump.fun logo" 
+                className="w-5 h-5 object-contain" 
+              />
             </a>
             <a 
               href="https://dexscreener.com" 
