@@ -140,11 +140,22 @@ export default function VotingSection({ content: initialContent }: VotingSection
                   <CarouselItem key={item.id}>
                     <div className="p-1">
                       <Card className="bg-muted rounded-xl overflow-hidden mb-6">
-                        <img 
-                          src={item.url} 
-                          alt={`Content ${item.id}`}
-                          className="w-full object-cover max-h-96"
-                        />
+                        {item.type === 'video' ? (
+                          <video 
+                            src={item.url} 
+                            controls
+                            autoPlay
+                            muted
+                            loop
+                            className="w-full object-cover max-h-96"
+                          />
+                        ) : (
+                          <img 
+                            src={item.url} 
+                            alt={`Content ${item.id}`}
+                            className="w-full object-cover max-h-96"
+                          />
+                        )}
                       </Card>
                       
                       <Card className="bg-muted/50 rounded-xl">

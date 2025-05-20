@@ -80,12 +80,22 @@ export default function ContentCard({ content }: ContentCardProps) {
   return (
     <Card className="content-card bg-muted/50 rounded-xl overflow-hidden border border-muted/50 hover:border-primary/50 transition-all">
       <div className="relative">
-        <img 
-          src={content.url} 
-          alt={`${content.type} content`} 
-          className="w-full h-48 object-cover"
-          loading="lazy"
-        />
+        {content.type === 'video' ? (
+          <video 
+            src={content.url} 
+            className="w-full h-48 object-cover"
+            muted
+            controls
+            preload="metadata"
+          />
+        ) : (
+          <img 
+            src={content.url} 
+            alt={`${content.type} content`} 
+            className="w-full h-48 object-cover"
+            loading="lazy"
+          />
+        )}
         <div className="absolute top-2 right-2 bg-background/80 text-white text-xs py-1 px-2 rounded-full">
           {content.type.charAt(0).toUpperCase() + content.type.slice(1)}
         </div>
