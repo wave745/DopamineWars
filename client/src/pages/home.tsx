@@ -32,11 +32,11 @@ export default function Home() {
         {/* Trending Content - Now at the top */}
         <ContentGrid title="Trending" accentColor="#FBBF24" />
 
-        {/* Upload Section */}
-        <UploadSection />
-
-        {/* Voting Section - Now below upload section */}
+        {/* Voting Section - Now above upload section */}
         <VotingSection />
+
+        {/* Upload Section - Now below voting section */}
+        <UploadSection />
 
         {/* Live Dopameter Chart - Now where voting section was */}
         <LiveChart />
