@@ -2,6 +2,9 @@ import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import BrainLogo from "@/components/ui/brain-logo";
 import { useState } from "react";
+import { FaXTwitter } from "react-icons/fa6";
+import { SiDexscreener, SiDextools } from "react-icons/si";
+import { IoWater } from "react-icons/io5";
 
 export default function Navbar() {
   const [location] = useLocation();
@@ -49,14 +52,32 @@ export default function Navbar() {
         </div>
         
         <div className="flex items-center space-x-3">
-          <Button 
-            variant="ghost" 
-            className="bg-primary/20 hover:bg-primary/30 text-white"
-          >
-            <Link href="/trending">
-              Explore Content
-            </Link>
-          </Button>
+          <div className="flex items-center bg-primary/20 rounded-md px-4 py-2 space-x-4">
+            <a 
+              href="https://x.com/DopameterNet" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-white hover:text-gray-300 transition"
+            >
+              <FaXTwitter size={20} />
+            </a>
+            <a 
+              href="https://pump.fun" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-white hover:text-gray-300 transition"
+            >
+              <IoWater size={20} />
+            </a>
+            <a 
+              href="https://dexscreener.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-white hover:text-gray-300 transition"
+            >
+              <SiDextools size={20} />
+            </a>
+          </div>
           <Button 
             variant="ghost" 
             className="md:hidden text-white p-2"
