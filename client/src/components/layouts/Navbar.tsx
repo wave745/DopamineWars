@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/button";
 import BrainLogo from "@/components/ui/brain-logo";
 import { useState } from "react";
 import { FaXTwitter } from "react-icons/fa6";
-import { SiDexscreener, SiDextools } from "react-icons/si";
-import { IoWater } from "react-icons/io5";
+import { FaWater } from "react-icons/fa";
+import { BiSolidBarChartAlt2 } from "react-icons/bi";
 
 export default function Navbar() {
   const [location] = useLocation();
@@ -67,7 +67,7 @@ export default function Navbar() {
               rel="noopener noreferrer"
               className="text-white hover:text-gray-300 transition"
             >
-              <IoWater size={20} />
+              <FaWater size={20} />
             </a>
             <a 
               href="https://dexscreener.com" 
@@ -75,7 +75,7 @@ export default function Navbar() {
               rel="noopener noreferrer"
               className="text-white hover:text-gray-300 transition"
             >
-              <SiDextools size={20} />
+              <BiSolidBarChartAlt2 size={20} />
             </a>
           </div>
           <Button 
