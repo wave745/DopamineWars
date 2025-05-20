@@ -41,7 +41,7 @@ export default function VotingSection({ content: initialContent }: VotingSection
   // Change content every 30 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      if (allContents.length > 0) {
+      if (allContents.length > 1) { // Only rotate if we have more than one piece of content
         setCurrentContentIndex(prevIndex => 
           prevIndex >= allContents.length - 1 ? 0 : prevIndex + 1
         );
@@ -98,11 +98,11 @@ export default function VotingSection({ content: initialContent }: VotingSection
     voteMutation.mutate(emoji);
   };
 
-  if (!content) {
+  if (!content || allContents.length === 0) {
     return (
       <div className="py-8 mb-12 bg-muted/20 rounded-xl">
         <div className="container mx-auto px-4 text-center py-12">
-          <p className="text-muted-foreground">Select content to vote on</p>
+          <p className="text-muted-foreground">No content to vote on yet. Upload some content to get started!</p>
         </div>
       </div>
     );
