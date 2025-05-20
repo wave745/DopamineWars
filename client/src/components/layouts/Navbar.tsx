@@ -54,7 +54,7 @@ export default function Navbar() {
         <div className="flex items-center space-x-3">
           <div className="flex items-center bg-primary/20 rounded-md px-4 py-2 space-x-4">
             <a 
-              href="https://x.com/DopameterNet" 
+              href="https://x.com/Dopameter" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-white hover:text-gray-300 transition"
