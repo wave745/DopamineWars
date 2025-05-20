@@ -240,6 +240,20 @@ button:active {
   animation: shine 1.5s infinite;
 }
 
+/* Brain logo glowing animation */
+.brain-logo {
+  animation: brain-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes brain-glow {
+  0% { 
+    filter: drop-shadow(0 0 2px hsl(142, 70%, 45%));
+  }
+  100% { 
+    filter: drop-shadow(0 0 8px hsl(142, 70%, 60%));
+  }
+}
+
 @layer base {
   * {
     @apply border-border;
