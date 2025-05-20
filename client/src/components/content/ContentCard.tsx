@@ -83,7 +83,7 @@ export default function ContentCard({ content }: ContentCardProps) {
         {content.type === 'video' ? (
           <video 
             src={content.url} 
-            className="w-full h-48 object-cover"
+            className="w-full h-72 object-contain bg-black"
             muted
             controls
             preload="metadata"
@@ -92,7 +92,7 @@ export default function ContentCard({ content }: ContentCardProps) {
           <img 
             src={content.url} 
             alt={`${content.type} content`} 
-            className="w-full h-48 object-cover"
+            className="w-full h-72 object-contain bg-black"
             loading="lazy"
           />
         )}

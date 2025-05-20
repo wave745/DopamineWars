@@ -147,13 +147,13 @@ export default function VotingSection({ content: initialContent }: VotingSection
                             autoPlay
                             muted
                             loop
-                            className="w-full object-cover max-h-96"
+                            className="w-full h-[450px] object-contain bg-black"
                           />
                         ) : (
                           <img 
                             src={item.url} 
                             alt={`Content ${item.id}`}
-                            className="w-full object-cover max-h-96"
+                            className="w-full h-[450px] object-contain bg-black"
                           />
                         )}
                       </Card>
@@ -197,11 +197,22 @@ export default function VotingSection({ content: initialContent }: VotingSection
           ) : (
             <>
               <Card className="bg-muted rounded-xl overflow-hidden mb-6">
-                <img 
-                  src={content?.url} 
-                  alt="Content to rate" 
-                  className="w-full object-cover max-h-96"
-                />
+                {content?.type === 'video' ? (
+                  <video 
+                    src={content.url} 
+                    controls
+                    autoPlay
+                    muted
+                    loop
+                    className="w-full h-[450px] object-contain bg-black"
+                  />
+                ) : (
+                  <img 
+                    src={content?.url} 
+                    alt="Content to rate" 
+                    className="w-full h-[450px] object-contain bg-black"
+                  />
+                )}
               </Card>
               
               <Card className="bg-muted/50 rounded-xl">
