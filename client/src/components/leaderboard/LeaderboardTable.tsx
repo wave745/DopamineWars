@@ -1,15 +1,11 @@
-import { useState } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { TimeFrame, LeaderboardEntry } from "@/types";
+import { LeaderboardEntry } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 
 export default function LeaderboardTable() {
-  const [timeFrame, setTimeFrame] = useState<TimeFrame>("daily");
-
-  const { data: leaderboardData, isLoading } = useQuery({
-    queryKey: [`/api/leaderboard/${timeFrame}`],
+  const { data: leaderboardData = [], isLoading } = useQuery<LeaderboardEntry[]>({
+    queryKey: ['/api/leaderboard/daily'],
   });
 
   const emojiColor = (emoji: string) => {
@@ -47,33 +43,6 @@ export default function LeaderboardTable() {
           <h2 className="text-2xl md:text-3xl font-bold font-sans">
             <span className="text-[#10B981]">Dopamine</span> Leaderboard
           </h2>
-          
-          <div className="flex space-x-3">
-            <Button 
-              variant={timeFrame === "daily" ? "default" : "secondary"} 
-              size="sm" 
-              className="rounded-full" 
-              onClick={() => setTimeFrame("daily")}
-            >
-              Daily
-            </Button>
-            <Button 
-              variant={timeFrame === "weekly" ? "default" : "secondary"} 
-              size="sm" 
-              className="rounded-full" 
-              onClick={() => setTimeFrame("weekly")}
-            >
-              Weekly
-            </Button>
-            <Button 
-              variant={timeFrame === "monthly" ? "default" : "secondary"} 
-              size="sm" 
-              className="rounded-full" 
-              onClick={() => setTimeFrame("monthly")}
-            >
-              Monthly
-            </Button>
-          </div>
         </div>
         
         <div className="overflow-hidden rounded-xl bg-muted/30 backdrop-blur-sm border border-muted/50">
@@ -116,7 +85,7 @@ export default function LeaderboardTable() {
                     </TableCell>
                   </TableRow>
                 ))
-              ) : leaderboardData && leaderboardData.length > 0 ? (
+              ) : leaderboardData.length > 0 ? (
                 leaderboardData.map((item: LeaderboardEntry) => (
                   <TableRow key={item.id} className="hover:bg-muted/20 transition">
                     <TableCell className="px-6 py-4 whitespace-nowrap">
