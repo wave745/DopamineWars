@@ -397,51 +397,8 @@ export class MemStorage implements IStorage {
       profileImageUrl: "https://api.dicebear.com/6.x/avataaars/svg?seed=demo"
     });
 
-    // Sample content URLs
-    const sampleUrls = [
-      "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=500", // Funny cat
-      "https://images.unsplash.com/photo-1559757175-5700dde675bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=500", // Brain activity
-      "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=500", // Abstract
-      "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=500", // Viral
-      "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=500", // Meme
-      "https://images.unsplash.com/photo-1566837945700-30057527ade0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=500", // Tweet
-    ];
-
-    // Sample content types
-    const contentTypes = ["meme", "image", "tweet", "video"];
-
-    // Create sample content
-    sampleUrls.forEach((url, index) => {
-      const type = contentTypes[index % contentTypes.length];
-      this.createContent({
-        userId: "demo-user-1", // Using string ID
-        type,
-        url
-      });
-    });
-
-    // Create sample votes
-    const emojis = ["😐", "😊", "😄", "🤯", "🔥"];
-    
-    // For each content, add 10-50 random votes
-    for (let contentId = 1; contentId <= sampleUrls.length; contentId++) {
-      const voteCount = 10 + Math.floor(Math.random() * 40);
-      
-      for (let i = 0; i < voteCount; i++) {
-        const emoji = emojis[Math.floor(Math.random() * emojis.length)];
-        this.createVote({
-          userId: "demo-user-1", // Using string ID
-          contentId,
-          emoji
-        });
-      }
-    }
-
-    // Create sample favorites
-    this.saveFavorite("demo-user-1", 1);
-    this.saveFavorite("demo-user-1", 3);
-
-    // Create sample chart data for all time frames
+    // Only create sample chart data (no content)
+    // This allows users to see the charts while fresh content is uploaded
     this.createSampleChartData("24H");
     this.createSampleChartData("7D");
     this.createSampleChartData("30D");

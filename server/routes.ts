@@ -232,6 +232,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/content/:id/share", async (_req, res) => {
     res.status(200).json({ message: "Content shared" });
   });
+  
+  // Reset all content (remove existing content to start fresh)
+  app.post("/api/content/reset", async (_req, res) => {
+    try {
+      await storage.resetContent();
+      res.status(200).json({ message: "All content has been reset" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to reset content" });
+    }
+  });
 
   app.get("/api/leaderboard/:timeFrame", async (req, res) => {
     try {
