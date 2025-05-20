@@ -185,7 +185,7 @@ export function ContentUploader({ className = '', onSuccess }: ContentUploaderPr
             <div className="space-y-2">
               <label className="text-sm font-medium text-muted-foreground">Content Type</label>
               <div className="flex space-x-2">
-                {['image', 'meme', 'tweet', 'video', 'other'].map((type) => (
+                {['image', 'video'].map((type) => (
                   <Button
                     key={type}
                     type="button"

@@ -31,7 +31,7 @@ const upload = multer({
 function getContentType(mimetype: string): string {
   if (mimetype.startsWith("image/")) return "image";
   if (mimetype.startsWith("video/")) return "video";
-  return "other";
+  return "image"; // Default to image instead of other
 }
 
 // Emoji validation schema
@@ -141,6 +141,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       if (!url) {
         return res.status(400).json({ message: "URL is required" });
+      }
+      
+      // Only allow image or video type
+      if (type !== 'image' && type !== 'video') {
+        return res.status(400).json({ message: "Content type must be image or video" });
       }
       
       const validatedData = insertContentSchema.parse({
