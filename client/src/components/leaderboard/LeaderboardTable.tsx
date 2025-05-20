@@ -54,7 +54,6 @@ export default function LeaderboardTable() {
                 <TableHead className="text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Type</TableHead>
                 <TableHead className="text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Rating</TableHead>
                 <TableHead className="text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Votes</TableHead>
-                <TableHead className="text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">Action</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody className="bg-background divide-y divide-muted/30">
@@ -79,9 +78,6 @@ export default function LeaderboardTable() {
                     </TableCell>
                     <TableCell className="px-6 py-4 whitespace-nowrap">
                       <div className="h-4 w-10 bg-muted animate-pulse"></div>
-                    </TableCell>
-                    <TableCell className="px-6 py-4 whitespace-nowrap text-right">
-                      <div className="h-4 w-8 bg-muted animate-pulse ml-auto"></div>
                     </TableCell>
                   </TableRow>
                 ))
@@ -123,11 +119,6 @@ export default function LeaderboardTable() {
                     </TableCell>
                     <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
                       {item.totalVotes.toLocaleString()}
-                    </TableCell>
-                    <TableCell className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <Link href={`/content/${item.id}`}>
-                        <a className="text-primary hover:text-[#EC4899]">View</a>
-                      </Link>
                     </TableCell>
                   </TableRow>
                 ))
