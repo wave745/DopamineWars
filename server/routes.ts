@@ -13,7 +13,20 @@ import { fromZodError } from "zod-validation-error";
 
 // Set up multer storage configuration for file uploads
 const upload = multer({
-  storage: multer.memoryStorage(),
+  storage: multer.diskStorage({
+    destination: function(_req, _file, cb) {
+      // Ensure uploads directory exists
+      const uploadDir = path.join(process.cwd(), 'uploads');
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      }
+      cb(null, uploadDir);
+    },
+    filename: function(_req, file, cb) {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+      cb(null, uniqueSuffix + path.extname(file.originalname));
+    }
+  }),
   limits: {
     fileSize: 10 * 1024 * 1024, // 10MB limit
   },
@@ -99,19 +112,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Set a generic anonymous user ID
       const userId = "anonymous-user";
-
-      // Create a unique filename
-      const fileName = `${Date.now()}-${Math.round(Math.random() * 1E9)}${path.extname(req.file.originalname)}`;
       
-      // Ensure uploads directory exists
-      const uploadDir = path.join(process.cwd(), 'uploads');
-      if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { recursive: true });
-      }
-      
-      // Save the file
-      const filePath = path.join(uploadDir, fileName);
-      fs.writeFileSync(filePath, req.file.buffer);
+      // Get the filename from the uploaded file
+      const fileName = req.file.filename;
       
       // Create content in database
       const contentType = req.body.type || getContentType(req.file.mimetype);
