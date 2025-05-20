@@ -35,11 +35,11 @@ export default function Home() {
         {/* Upload Section */}
         <UploadSection />
 
-        {/* Live Dopameter Chart - Now below upload section */}
-        <LiveChart />
-
-        {/* Voting Section - Auto-rotating content */}
+        {/* Voting Section - Now below upload section */}
         <VotingSection />
+
+        {/* Live Dopameter Chart - Now where voting section was */}
+        <LiveChart />
 
         {/* Leaderboard Section (Shortened version) */}
         <LeaderboardTable />
