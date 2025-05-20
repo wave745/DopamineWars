@@ -2,7 +2,7 @@ import { Link } from "wouter";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Brain } from "lucide-react";
-import { FaTwitter, FaInstagram, FaDiscord, FaTiktok } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 
 export default function Footer() {
   return (
@@ -25,7 +25,7 @@ export default function Footer() {
             
             <div className="flex space-x-4">
               <a href="#" className="text-muted-foreground hover:text-primary transition">
-                <FaTwitter />
+                <FaXTwitter />
               </a>
             </div>
           </div>
