@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import BrainLogo from "@/components/ui/brain-logo";
 import { useState } from "react";
 import { FaXTwitter } from "react-icons/fa6";
-import { BiSolidBarChartAlt2 } from "react-icons/bi";
 
 export default function Navbar() {
   const [location] = useLocation();
@@ -78,7 +77,11 @@ export default function Navbar() {
               rel="noopener noreferrer"
               className="text-white hover:text-gray-300 transition"
             >
-              <BiSolidBarChartAlt2 size={20} />
+              <img 
+                src="https://th.bing.com/th/id/OIP.HR1SHnKKLmUsBa3w3K7oogHaHa?cb=iwc2&rs=1&pid=ImgDetMain" 
+                alt="DexScreener logo" 
+                className="w-5 h-5 object-contain" 
+              />
             </a>
           </div>
           <Button 
