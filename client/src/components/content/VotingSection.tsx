@@ -123,11 +123,16 @@ export default function VotingSection({ content: initialContent }: VotingSection
           {allContents.length > 0 ? (
             <Carousel
               className="w-full"
-              onSelect={handleCarouselChange}
-              defaultIndex={currentContentIndex}
+              setApi={(api) => {
+                api?.on("select", () => {
+                  const currentIndex = api.selectedScrollSnap();
+                  handleCarouselChange(currentIndex);
+                });
+              }}
               opts={{
                 loop: true,
                 align: "center",
+                startIndex: currentContentIndex,
               }}
             >
               <CarouselContent>
