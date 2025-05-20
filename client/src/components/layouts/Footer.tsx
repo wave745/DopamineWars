@@ -24,7 +24,7 @@ export default function Footer() {
             </p>
             
             <div className="flex space-x-4">
-              <a href="#" className="text-muted-foreground hover:text-primary transition">
+              <a href="https://x.com/DopameterNet" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition">
                 <FaXTwitter />
               </a>
             </div>
